@@ -7,7 +7,6 @@ requirejs.config({
                          async: 'vendors/requirejs/plugins/async',
                          goog: 'vendors/requirejs/plugins/goog',
                          jquery: 'vendors/jquery/jquery-2.0.3',
-//                         gApiClient: 'vendors/google/client?onload=gApiClientLoaded',
                          moment: "vendors/moment/moment",
                          'underscore.string': 'vendors/underscore/underscore.string'
                      },
@@ -52,7 +51,6 @@ function run() {
             'bootstrap',
             'config'
         ], function ($, _, TwitterBoostrap, Config) {
-            window.Config = Config;
             window.setTimeout(checkAuth, 1);
             function handleAuthResult(authResult) {
                 if (!authResult || authResult.error) {
@@ -82,28 +80,12 @@ function run() {
                                 }});
                                 request.execute(function (resp) {
                                     console.log(_.sprintf("Default folder '%s' has been created successfully."));
-                                    window.rootDir = resp;
-                                    start();
                                 });
-                            } else {
-                                window.rootDir = item;
-                                start();
                             }
                         });
                     });
 
                 }
-
-            }
-
-            function start() {
-                chrome.browserAction.onClicked.addListener(function (tab) {
-                    chrome.tabs.create({
-                                           url: chrome.extension.getURL('index.html')
-                                       }, function (tab) {
-                    });
-                });
-
 
             }
 
@@ -135,63 +117,4 @@ function run() {
                     handleAuthResult);
             }
         });
-}
-
-function performUpload(files) {
-    var file = files[0];
-    insertFile(file, function(resp){
-        console.log(resp);
-    });
-
-}
-
-
-/**
- * Insert new file.
- *
- * @param {File} fileData File object to read data from.
- * @param {Function} callback Function to call when the request is complete.
- */
-function insertFile(fileData, callback) {
-    const boundary = '-------314159265358979323846';
-    const delimiter = "\r\n--" + boundary + "\r\n";
-    const close_delim = "\r\n--" + boundary + "--";
-
-    var reader = new FileReader();
-    reader.readAsBinaryString(fileData);
-    reader.onload = function (e) {
-        var contentType = fileData.type || 'application/octet-stream';
-        var metadata = {
-            'title': fileData.name,
-            'mimeType': contentType,
-            'parents' : [{id: window.rootDir.id}]
-        };
-
-        var base64Data = btoa(reader.result);
-        var multipartRequestBody =
-            delimiter +
-                'Content-Type: application/json\r\n\r\n' +
-                JSON.stringify(metadata) +
-                delimiter +
-                'Content-Type: ' + contentType + '\r\n' +
-                'Content-Transfer-Encoding: base64\r\n' +
-                '\r\n' +
-                base64Data +
-                close_delim;
-
-        var request = gapi.client.request({
-                                              'path': '/upload/drive/v2/files',
-                                              'method': 'POST',
-                                              'params': {'uploadType': 'multipart'},
-                                              'headers': {
-                                                  'Content-Type': 'multipart/mixed; boundary="' + boundary + '"'
-                                              },
-                                              'body': multipartRequestBody});
-        if (!callback) {
-            callback = function (file) {
-                console.log(file)
-            };
-        }
-        request.execute(callback);
-    }
 }

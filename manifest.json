@@ -8,8 +8,9 @@
             "19": "images/icon19.png",
             "38": "images/icon38.png"
         },
-        "default_title": "Instance File Share for Google Drive(TM)",
-        "default_popup": "popup.html"
+        "default_title": "Instance File Share for Google Drive(TM)"
+//        ,
+//        "default_popup": "popup/popup.html"
     },
     "background": {
         "page": "background.html",

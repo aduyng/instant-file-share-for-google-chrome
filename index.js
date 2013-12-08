@@ -7,7 +7,6 @@ requirejs.config({
                          async: 'vendors/requirejs/plugins/async',
                          goog: 'vendors/requirejs/plugins/goog',
                          jquery: 'vendors/jquery/jquery-2.0.3',
-                         gApiClient: 'vendors/google/client',
                          moment: "vendors/moment/moment",
                          'underscore.string': 'vendors/underscore/underscore.string'
                      },
@@ -31,22 +30,17 @@ requirejs.config({
                          }
                      }
                  });
-
 require(
     [
         'jquery',
         'underscore',
-        'bootstrap',
-        'config',
-        'gApiClient'
-    ], function ($, _, TwitterBoostrap, Config) {
+        'bootstrap'
+    ], function ($, _, TwitterBoostrap) {
+        window.backgroundPage = chrome.extension.getBackgroundPage();
 
-        gapi.auth.authorize(
-            {'client_id': Config.google.clientId, 'scope': Config.google.drive.scopes, 'immediate': true},
-            function(authResult){
-                console.log(authResult);
-                if( !authResult){
-                }
-            });
+        $('#upload').click(function(event){
+            var files = document.getElementById('pick-a-file').files;
+            backgroundPage.performUpload(files);
+        });
 
     });
