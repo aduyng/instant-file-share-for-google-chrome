@@ -1,0 +1,23 @@
+{
+    "manifest_version": 2,
+    "version": "0.0.1",
+    "name": "Instance File Share for Google Drive(TM)",
+    "key": "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAsHPXSbEbT5EkWMfqZ6xx8sw8jW5ihte5fnBZ1d0eylv2Kth2URbDPm9iUjdzN8HPdnDJlqxwZfsk2NoiQrYchNGRqIhZNykbMglPNSS3a4psnhTosK5N6UQuPZMC4CXVHeMlpT8XTEFXl1QeueyZ0X1r09EGOBoKpt8wXox/+1+W1zPZDqk4wuqwH6Ij/Wx/SWjqPpJRbIRp16df5GTCJAXhJVwjZBPiMG0uyhqL/x07g4tKEPVWXrtxcSPcyJ53YfK3rgyd++WcGuoz5qAoVYouHGxWCMw/JCxxsbCFiD0jU6C7tYZt7k177BV1fadkCE5pyBLl9328iTLEPi828QIDAQAB",
+    "browser_action": {
+        "default_icon": {
+            "19": "images/icon19.png",
+            "38": "images/icon38.png"
+        },
+        "default_title": "Instance File Share for Google Drive(TM)",
+        "default_popup": "popup.html"
+    },
+    "background": {
+        "page": "background.html",
+        "persistent": true
+    },
+    "permissions":[
+        "https://*.google.com/*",
+        "tabs"
+    ],
+    "content_security_policy": "script-src 'self' https://apis.google.com; object-src 'self'"
+}
